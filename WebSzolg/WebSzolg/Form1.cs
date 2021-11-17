@@ -7,12 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WebSzolg.Entities;
 using WebSzolg.MnbServiceReference;
 
 namespace WebSzolg
 {
     public partial class Form1 : Form
     {
+        new BindingList<RateData> rates;
         public Form1()
         {
             InitializeComponent();
