@@ -15,7 +15,7 @@ namespace WebSzolg
 {
     public partial class Form1 : Form
     {
-        new BindingList<RateData> Rates;
+        BindingList<RateData> Rates = new BindingList<RateData>();
         public Form1()
         {
             InitializeComponent();
@@ -41,11 +41,11 @@ namespace WebSzolg
 
             foreach (XmlElement element in xml.DocumentElement)
             {
-                RateData r = new RateData();
-
+                var r = new RateData();
                 Rates.Add(r);
 
                 var childElement = (XmlElement)element.ChildNodes[0];
+
                 r.Currency = childElement.GetAttribute("curr");
 
                 r.Date = DateTime.Parse(element.GetAttribute("date"));
@@ -55,6 +55,9 @@ namespace WebSzolg
                 if (unit != 0)
                     r.Value = value / unit;
             }
+
+            chartRateData.DataSource = Rates;
+
         }
     }
 }
