@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 using WebSzolg.Entities;
 using WebSzolg.MnbServiceReference;
 
@@ -19,9 +20,10 @@ namespace WebSzolg
         {
             InitializeComponent();
             Hivas();
+            dataGridView1.DataSource = rates;
         }
 
-        private void Hivas()
+        public void Hivas()
         {
             var mnbService = new MNBArfolyamServiceSoapClient();
 
@@ -33,6 +35,9 @@ namespace WebSzolg
             var response = mnbService.GetExchangeRates(request);
 
             var result = response.GetExchangeRatesResult;
+
+            var xml = new XmlDocument();
+            xml.LoadXml(result);
         }
     }
 }
