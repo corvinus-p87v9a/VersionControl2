@@ -15,12 +15,12 @@ namespace WebSzolg
 {
     public partial class Form1 : Form
     {
-        new BindingList<RateData> rates;
+        new BindingList<RateData> Rates;
         public Form1()
         {
             InitializeComponent();
             Hivas();
-            dataGridView1.DataSource = rates;
+            dataGridView1.DataSource = Rates;
         }
 
         public void Hivas()
@@ -38,6 +38,13 @@ namespace WebSzolg
 
             var xml = new XmlDocument();
             xml.LoadXml(result);
+
+            foreach (XmlElement element in xml.DocumentElement)
+            {
+                RateData r = new RateData();
+
+                Rates.Add(r);
+            }
         }
     }
 }
