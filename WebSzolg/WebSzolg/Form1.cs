@@ -22,11 +22,15 @@ namespace WebSzolg
         private void Hivas()
         {
             var mnbService = new MNBArfolyamServiceSoapClient();
-            var request = new GetExchangeRatesRequestBody();
-            request.currencyNames = "EUR";
-            request.startDate = "2020-01-01";
-            request.endDate = "2020-06-30";
 
+            var request = new GetExchangeRatesRequestBody();
+                 request.currencyNames = "EUR";
+                 request.startDate = "2020-01-01";
+                 request.endDate = "2020-06-30";
+
+            var response = mnbService.GetExchangeRates(request);
+
+            var result = response.GetExchangeRatesResult;
         }
     }
 }
