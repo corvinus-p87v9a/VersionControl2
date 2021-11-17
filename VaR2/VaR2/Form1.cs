@@ -33,7 +33,7 @@ namespace VaR2
 
             dataGridView2.DataSource = Portfolio;
         }
-        private decimal GetPortfolioValue(DateTime date)
+        private decimal GetPortfolioValue(DateTime date )
         {
             decimal value = 0;
             foreach (var item in Portfolio)
