@@ -44,6 +44,16 @@ namespace WebSzolg
                 RateData r = new RateData();
 
                 Rates.Add(r);
+
+                var childElement = (XmlElement)element.ChildNodes[0];
+                r.Currency = childElement.GetAttribute("curr");
+
+                r.Date = DateTime.Parse(element.GetAttribute("date"));
+
+                var unit = decimal.Parse(childElement.GetAttribute("unit"));
+                var value = decimal.Parse(childElement.InnerText);
+                if (unit != 0)
+                    r.Value = value / unit;
             }
         }
     }
