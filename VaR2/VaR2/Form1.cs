@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -66,6 +67,25 @@ namespace VaR2
                 value += (decimal)last.Price * item.Volume;
             }
             return value;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "txt|*.txt";
+            sfd.Title = "Save to text file";
+            sfd.ShowDialog();
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                StreamWriter sw = new StreamWriter(sfd.OpenFile());
+                sw.WriteLine("Időszak, Nyereség");
+                for (int i = 0; i < Portfolio.Count; i++)
+                {
+                    sw.WriteLine(i.ToString() + "," + Portfolio[i].Volume.ToString());
+                }
+                sw.Dispose();
+                sw.Close();
+            }
         }
     }
 }
