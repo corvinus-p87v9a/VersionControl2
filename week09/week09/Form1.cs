@@ -26,6 +26,69 @@ namespace week09
             BirthProbabilities = GetBirthProbabilities(@"C:\temp\születés.csv");
             DeathProbabilities = GetDeathProbabilities(@"C:\temp\halál.csv");
         }
+        private void Simulation()
+        {
+            richTextBox1.Text = string.Empty;
+            Males.Clear();
+            Females.Clear();
+
+            Population = GetPopulation(@textBoxCsvPath.Text);
+            BirthProbabilities = GetBirthProbabilities(@"C:\temp\születés.csv");
+            DeathProbabilities = GetDeathProbabilities(@"C:\temp\halál.csv");
+
+            for (int year = 2005; year <= numericUpDownCloseDate.Value; year++)
+            {
+                for (int i = 0; i < Population.Count; i++)
+                {
+                    SimStep(year, Population[i]);
+                }
+
+                int numberOfMales = (from x in Population
+                                     where x.Gender == Gender.Male && x.IsAlive
+                                     select x).Count();
+                int numberOfFemales = (from x in Population
+                                       where x.Gender == Gender.Female && x.IsAlive
+                                       select x).Count();
+                Males.Add(numberOfMales);
+                Females.Add(numberOfFemales);
+                Console.WriteLine(string.Format("Év: {0}, Férfiak: {1}, Nők: {2}", year, numberOfMales, numberOfFemales));
+            }
+            DisplayResult();
+        }
+
+        private void SimStep(int year, Person person)
+        {
+            if (!person.IsAlive) return;
+            byte age = (byte)(year - person.BirthYear);
+            double ProbOfDeath = (from x in DeathProbabilities
+                                  where x.Gender == person.Gender && x.Age == age
+                                  select x.ProbabilityOfDeath).FirstOrDefault();
+            if (rng.NextDouble() <= ProbOfDeath) person.IsAlive = false;
+            if (person.IsAlive && person.Gender == Gender.Female)
+            {
+                double ProbOfBirth = (from x in BirthProbabilities
+                                      where x.Age == age && x.NumberOfChildren == person.NumberOfChildren
+                                      select x.ProbabilityOfBirth).FirstOrDefault();
+                if (rng.NextDouble() <= ProbOfBirth)
+                {
+                    Person newBorn = new Person()
+                    {
+                        BirthYear = year,
+                        Gender = (Gender)rng.Next(1, 3),
+                        NumberOfChildren = 0,
+                    };
+                    Population.Add(newBorn);
+                }
+            }
+        }
+        private void DisplayResult()
+        {
+            for (int i = 2005; i <= numericUpDownCloseDate.Value; i++)
+            {
+                richTextBox1.Text +=
+                    string.Format("Szimulációs év: {0}\n\t Férfiak: {1}\n\t Nők: {2}\n\n", i, Males[i - 2005], Females[i - 2005]);
+            }
+        }
 
         private List<DeathProbability> GetDeathProbabilities(string csvpath)
         {
@@ -66,7 +129,7 @@ namespace week09
             return births;
         }
 
-        private List<Person> GetPopulation(string csvpath)
+                private List<Person> GetPopulation(string csvpath)
         {
             List<Person> population = new List<Person>();
 

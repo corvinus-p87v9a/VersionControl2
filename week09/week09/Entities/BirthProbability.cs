@@ -9,7 +9,7 @@ namespace week09.Entities
     internal class BirthProbability
     {
         public int Age { get; set; }
-        public int NbrOfChildren { get; set; }
-        public double BirthP { get; set; }
+        public int NumberOfChildren { get; set; }
+        public double ProbabilityOfBirth { get; set; }
     }
 }
